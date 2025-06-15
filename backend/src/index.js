@@ -2,6 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import connectDB from './lib/db.js';
 import authRoutes from './routes/auth.route.js';
+import messageRoutes from './routes/message.route.js';
 import cookieParser from 'cookie-parser';
 
 dotenv.config({ path: "./.env"});
@@ -13,6 +14,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/messages", messageRoutes);
 
 connectDB()
 .then(() => {
