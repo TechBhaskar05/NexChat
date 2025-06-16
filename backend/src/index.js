@@ -5,10 +5,11 @@ import authRoutes from './routes/auth.route.js';
 import messageRoutes from './routes/message.route.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
+import { app, server } from './lib/socket.js';
 
 dotenv.config({ path: "./.env"});
 
-const app = express();
+// const app = express();
 
 app.use(express.json({limit: "100kb"}));
 app.use(express.urlencoded({ extended: true }));
@@ -27,7 +28,7 @@ connectDB()
         console.log("ERRR: ", error);
         throw error;
     });
-    app.listen(process.env.PORT || 8000, () => {
+    server.listen(process.env.PORT || 8000, () => {
         console.log(`Server is running on port ${process.env.PORT || 8000}`);
     })
 })

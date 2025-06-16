@@ -1,6 +1,7 @@
 import { Message } from "../models/message.model.js";
 import { User } from "../models/user.model.js";
 import cloudinary from "../lib/cloudinary.js";
+import { getReceiverSocketId, io } from "../lib/socket.js";
 
 const getUsersForSidebar = async (req, res) => {
     try {
@@ -56,6 +57,10 @@ const sendMessage = async (req, res) => {
         await newMessage.save();
 
         // TODO: realtime functionality goes here => socket.io
+        const receiverSocketId = getReceiverSocketId(receiverId);
+        if(receiverSocketId) {
+            io.to(receiverSocketId).emit("newMessage", newMessage); // send the new message to the receiver We are not using io.emit here because we want to send the message to a specific user, not all connected users as it is not a group chat
+        }
 
         res.status(201).json(newMessage);
     } catch (error) {
